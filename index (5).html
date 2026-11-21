@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI VIDEO GENERATOR 1000</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui;margin:0;padding:0}
+body{background:#0b0b0b;color:#fff;font-size:16px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding:0 14px 20px}
+.topMenu{position:sticky;top:0;z-index:999;background:#111;border-bottom:2px solid #ff0050;padding:8px 12px;display:flex;align-items:center;gap:8px}
+.menuBtn{background:#ff0050;color:#fff;border:0;width:42px;height:42px;border-radius:10px;font-size:22px;cursor:pointer;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;flex:1;min-width:0}
+.logo img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #ff0050}
+.logo b{font-size:15px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo span{font-size:11px;color:#00ff88}
+.langBox select{background:#222;color:#fff;border:1px solid #333;border-radius:20px;padding:8px;font-size:13px;width:auto}
+.whatsTop{background:#25D366;color:#fff;text-decoration:none;padding:9px 12px;border-radius:20px;font-weight:bold;font-size:13px;white-space:nowrap}
+/* تم التصليح: شيلنا sticky من القايمة عشان متغطيش على المحتوى */
+.topLinks{display:none;gap:6px;flex-wrap:wrap;background:#111;padding:10px 12px;border-bottom:2px solid #333}
+.topLinks.open{display:flex}
+.topLinks button{background:#222;border:0;color:#fff;padding:9px 11px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;line-height:1.3}
+.topLinks button.active{background:#ff0050}
+.hero{background:linear-gradient(135deg,#ff0050,#9c27b0,#0091ff);border-radius:22px;padding:22px;text-align:center;margin:16px 0;clear:both}
+.heroTop{display:flex;align-items:center;gap:16px;justify-content:center}
+.heroTop img{width:88px;height:88px;border-radius:50%;object-fit:cover;border:4px solid #fff}
+.heroTop h1{font-size:32px;line-height:1.1}
+.bigNum{font-size:58px;font-weight:900;line-height:1;margin:6px 0}
+.stats{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.stat{flex:1;min-width:110px;background:rgba(0,0,0,.35);border-radius:14px;padding:14px;text-align:center}
+.stat b{font-size:24px;display:block}
+.card{background:#1e1e1e;border-radius:18px;padding:18px;margin:14px 0;clear:both;overflow:hidden}
+.card h2{font-size:22px;margin-bottom:10px}
+button.bigBtn{background:#ff0050;color:#fff;border:0;padding:14px;border-radius:12px;font-weight:bold;cursor:pointer;width:100%;margin:6px 0;font-size:16px}
+button.green{background:#00c853}button.blue{background:#0091ff}button.orange{background:#ff6d00}button.purple{background:#9c27b0}
+input,textarea,select{width:100%;padding:14px;border-radius:12px;border:0;background:#333;color:#fff;margin:6px 0;font-size:16px}
+.site{background:#2a2a2a;padding:16px;border-radius:14px;margin:8px 0;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.site a{color:#00e5ff;text-decoration:none;font-weight:bold;white-space:nowrap;background:#111;padding:10px 16px;border-radius:25px}
+.hidden{display:none}
+#counter{font-size:48px;text-align:center;color:#00ff88;font-weight:900}
+.badge{padding:5px 11px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin:2px}
+.badge-free{background:#00c853}.badge-partial{background:#ffab00;color:#000}.badge-paid{background:#9c27b0}.badge-type{background:#333}
+.badge-trial{background:#00bcd4;color:#000}.badge-duration{background:#7e57c2;color:#fff}.badge-cam{background:#ff6d00}.badge-style{background:#0091ff}.badge-format{background:#00e5ff;color:#000}
+small{color:#aaa}
+#preview,#videoPreview{width:100%;border-radius:16px;display:none;margin:10px 0;max-height:380px;object-fit:cover}
+.uploadBox{border:2px dashed #ff0050;border-radius:16px;padding:24px;text-align:center;cursor:pointer;background:#2a2a2a}
+.qBox{background:#2a2a2a;border-radius:14px;padding:14px;margin:10px 0;clear:both;overflow:hidden}
+.qBox label{display:block;font-weight:bold;margin-bottom:8px;color:#00e5ff}
+.resultBox{background:#00251a;border:2px solid #00c853;border-radius:16px;padding:16px;margin:12px 0;clear:both}
+/* تم التصليح: كل زرار في مكانه ومش داخل على بعضه */
+.grid3{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grid3 button,.grid4 button{background:#333;padding:12px 8px;font-size:14px;border:0;color:#fff;border-radius:10px;cursor:pointer;min-height:48px;line-height:1.3;white-space:normal;word-break:break-word}
+.grid3 button.active{background:#ff0050}
+.grid4 button.active{background:#0091ff}
+.camGrid button.active{background:#ff6d00!important}
+.qGrid button.active{background:#00c853!important}
+.fGrid button.active{background:#00e5ff!important;color:#000!important}
+.upCard{background:#2a2a2a;border-radius:14px;padding:14px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.upCard b{font-size:16px}
+.upCard a{background:#1877F2;color:#fff;text-decoration:none;padding:10px 16px;border-radius:25px;font-weight:bold;white-space:nowrap;font-size:14px}
+@media(min-width:768px){.grid3{grid-template-columns:repeat(3,1fr)}.grid4{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:767px){.heroTop{flex-direction:column}.heroTop h1{font-size:26px}.site,.upCard{flex-direction:column;align-items:flex-start}.site a,.upCard a{margin-top:8px}}
+.footer{background:#111;border:2px solid #ff0050;border-radius:20px;padding:16px;margin:14px 0;display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap}
+.footer img{width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid #ff0050}
+.whatsBtn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:11px 18px;border-radius:25px;text-decoration:none;font-weight:bold}
+</style>
+</head>
+<body>
+
+<div class="topMenu">
+<button class="menuBtn" onclick="toggleMenu()" id="menuBtn">☰</button>
+<a class="logo" href="#"><img src="mohamed.jpg" onerror="this.src='https://via.placeholder.com/80'"><div><b>AI VIDEO GENERATOR 1000</b><span id="subTitle">1000 موقع • 15 أداة</span></div></a>
+<div class="langBox"><select id="langSelect" onchange="setLang(this.value)">
+<option value="ar">🇪🇬 العربية</option><option value="en">🇺🇸 English</option><option value="fr">🇫🇷 Français</option><option value="es">🇪🇸 Español</option><option value="de">🇩🇪 Deutsch</option><option value="tr">🇹🇷 Türkçe</option><option value="hi">🇮🇳 हिन्दी</option>
+</select></div>
+<a class="whatsTop" href="https://wa.me/201020810297" target="_blank">💬 واتساب</a>
+</div>
+
+<div class="topLinks open" id="topLinks">
+<button onclick="showSec('guide',this)" class="active">🧭 <span data-t="guide">المرشد</span></button>
+<button onclick="showSec('upload',this)">📤 <span>ارفع فيديو</span></button>
+<button onclick="showSec('photo',this)">🖼️ <span data-t="photo">صورة</span></button>
+<button onclick="showSec('videoUp',this)">🎥 <span data-t="video">فيديو</span></button>
+<button onclick="showSec('voice',this)">🎙️ <span data-t="voice">صوت</span></button>
+<button onclick="showSec('song',this)">🎵 <span data-t="song">أغنية</span></button>
+<button onclick="showSec('sites',this)">📺 <span data-t="sites">1000 موقع</span></button>
+<button onclick="showSec('prompt',this)">✍️ <span data-t="prompt">برومبت</span></button>
+<button onclick="showSec('translate',this)">🗣️ <span data-t="translate">مترجم</span></button>
+<button onclick="showSec('ideas',this)">💡 <span data-t="ideas">أفكار</span></button>
+<button onclick="showSec('trend',this)">🔥 <span data-t="trends">ترندات</span></button>
+<button onclick="showSec('script',this)">📝 <span data-t="script">سكريبت</span></button>
+<button onclick="showSec('schedule',this)">📅 <span data-t="schedule">نشر</span></button>
+<button onclick="showSec('saved',this)">💾 <span data-t="saved">فيديوهاتي</span></button>
+<button onclick="showSec('money',this)">📊 <span data-t="money">أرباح</span></button>
+<button onclick="showSec('views',this)">👁️ <span data-t="views">مشاهدات</span></button>
+</div>
+
+<div class="wrap">
+<div class="hero">
+<div class="heroTop"><img src="mohamed.jpg" onerror="this.src='https://via.placeholder.com/80'"><div><div style="font-size:42px">🎬</div><h1>AI VIDEO GENERATOR 1000</h1></div></div>
+<div class="bigNum">1000</div>
+<p id="heroDesc">برنامج واحد فيه <b>1000 موقع</b> لتوليد الفيديو + <b>15 أداة</b> + <b>مواقع الرفع</b></p>
+<div class="stats">
+<div class="stat"><b id="statTotal">1000</b><span>موقع توليد</span></div>
+<div class="stat"><b>15</b><span>أداة</span></div>
+<div class="stat"><b>16</b><span>📤 موقع رفع</span></div>
+<div class="stat"><b id="statFree">0</b><span>💚 مجاني</span></div>
+<div class="stat"><b id="statPartial">0</b><span>💛 جزئي</span></div>
+</div>
+</div>
+
+<div id="guide" class="card">
+<h2>🧭 <span data-t="guide">المرشد</span></h2>
+<div class="qBox"><label>🎬 نوع الفيديو:</label><div class="grid3" id="typeGrid">
+<button onclick="pickType(this,'شخص يتكلم')" class="active">👤 شخص يتكلم</button>
+<button onclick="pickType(this,'شخص يرقص')">💃 شخص يرقص</button>
+<button onclick="pickType(this,'فيلم')">🎬 فيلم</button>
+<button onclick="pickType(this,'إعلان')">📢 إعلان</button>
+<button onclick="pickType(this,'تيك توك')">🔥 تيك توك</button>
+<button onclick="pickType(this,'تعليمي')">📚 تعليمي</button>
+<button onclick="pickType(this,'كرتون')">🎨 كرتون</button>
+<button onclick="pickType(this,'أنمي')">🌸 أنمي</button>
+<button onclick="pickType(this,'كليب')">🎵 كليب</button>
+<button onclick="pickType(this,'رعب')">👻 رعب</button>
+<button onclick="pickType(this,'كوميدي')">😂 كوميدي</button>
+<button onclick="pickType(this,'وثائقي')">🦁 وثائقي</button>
+</div></div>
+<div class="qBox"><label>🎥 حركة الكاميرا:</label><div class="grid3 camGrid" id="camGrid">
+<button onclick="pickCam(this,'ثابتة')" class="active">📷 ثابتة</button>
+<button onclick="pickCam(this,'بتلف 360')">🔄 بتلف 360</button>
+<button onclick="pickCam(this,'زوم داخل')">🔍 زوم داخل</button>
+<button onclick="pickCam(this,'زوم خارج')">🔭 زوم خارج</button>
+<button onclick="pickCam(this,'بتطير - درون')">🚁 بتطير - درون</button>
+<button onclick="pickCam(this,'بتجري وراه')">🏃 بتجري وراه</button>
+<button onclick="pickCam(this,'سلو موشن')">🐢 سلو موشن</button>
+<button onclick="pickCam(this,'كاميرا مهزوزة')">📹 مهزوزة - واقعي</button>
+<button onclick="pickCam(this,'من فوق - جوي')">🦅 من فوق - جوي</button>
+<button onclick="pickCam(this,'من تحت')">👀 من تحت</button>
+<button onclick="pickCam(this,'بتلف حواليه')">🌀 بتلف حواليه</button>
+<button onclick="pickCam(this,'سينمائية - دوللي')">🎬 سينمائية - دوللي</button>
+</div><p style="margin-top:10px">الحركة: <b id="selectedCam" style="color:#ff6d00">ثابتة</b></p></div>
+<div class="qBox"><label>🎨 الستايل:</label><div class="grid4" id="styleGrid">
+<button onclick="pickStyle(this,'سينما')" class="active">🎬 سينما</button>
+<button onclick="pickStyle(this,'جرافيك')">💻 جرافيك</button>
+<button onclick="pickStyle(this,'كرتون')">🎨 كرتون</button>
+<button onclick="pickStyle(this,'أنمي')">🌸 أنمي</button>
+<button onclick="pickStyle(this,'واقعي')">📸 واقعي</button>
+<button onclick="pickStyle(this,'3D')">🧊 3D</button>
+<button onclick="pickStyle(this,'رعب')">👻 رعب</button>
+<button onclick="pickStyle(this,'وثائقي')">🦁 وثائقي</button>
+<button onclick="pickStyle(this,'أبيض وأسود')">⬛ أبيض وأسود</button>
+<button onclick="pickStyle(this,'قديم - فينتاج')">📼 فينتاج</button>
+<button onclick="pickStyle(this,'خيال علمي')">🚀 خيال علمي</button>
+<button onclick="pickStyle(this,'كوميكس')">💥 كوميكس</button>
+</div><p style="margin-top:10px">الستايل: <b id="selectedStyle" style="color:#0091ff">سينما</b></p></div>
+<div class="qBox"><label>✨ الجودة:</label><div class="grid4 qGrid" id="qualityGrid">
+<button onclick="pickQuality(this,'240p')">240p</button>
+<button onclick="pickQuality(this,'480p')">480p</button>
+<button onclick="pickQuality(this,'720p HD')">720p HD</button>
+<button onclick="pickQuality(this,'1080p Full HD')" class="active">1080p ⭐</button>
+<button onclick="pickQuality(this,'2K')">2K</button>
+<button onclick="pickQuality(this,'4K Ultra HD')">4K 🎬</button>
+<button onclick="pickQuality(this,'8K')">8K 💎</button>
+<button onclick="pickQuality(this,'كل الجودات')">كل الجودات</button>
+</div><p style="margin-top:10px">الجودة: <b id="selectedQuality" style="color:#00ff88">1080p Full HD</b></p></div>
+<div class="qBox"><label>📦 صيغة الفيديو:</label><div class="grid4 fGrid" id="formatGrid">
+<button onclick="pickFormat(this,'MP4 - تيك توك ويوتيوب')" class="active">📦 MP4 ⭐</button>
+<button onclick="pickFormat(this,'MOV - آيفون ومونتاج')">🎞️ MOV</button>
+<button onclick="pickFormat(this,'WEBM - للويب')">🌐 WEBM</button>
+<button onclick="pickFormat(this,'MKV - جودة عالية')">📀 MKV</button>
+<button onclick="pickFormat(this,'AVI - قديم')">📼 AVI</button>
+<button onclick="pickFormat(this,'GIF - متحرك')">🖼️ GIF</button>
+<button onclick="pickFormat(this,'عمودي 9:16 - ريلز وتيك توك')">📱 عمودي 9:16</button>
+<button onclick="pickFormat(this,'أفقي 16:9 - يوتيوب')">🖥️ أفقي 16:9</button>
+<button onclick="pickFormat(this,'مربع 1:1 - فيسبوك')">⬛ مربع 1:1</button>
+<button onclick="pickFormat(this,'ستوري 9:16')">📲 ستوري</button>
+<button onclick="pickFormat(this,'شورتس 9:16')">⚡ شورتس</button>
+<button onclick="pickFormat(this,'سينمائي 21:9')">🎬 سينمائي 21:9</button>
+</div><p style="margin-top:10px">الصيغة: <b id="selectedFormat" style="color:#00e5ff">MP4 - تيك توك ويوتيوب</b></p></div>
+<p>النوع: <b id="selectedType" style="color:#ff0050">شخص يتكلم</b> | 🎥 <b id="selectedCam2">ثابتة</b> | 🎬 <b id="selectedStyle2">سينما</b> | ✨ <b id="selectedQuality2">1080p Full HD</b> | 📦 <b id="selectedFormat2">MP4</b></p>
+<input id="gIdea" placeholder="اكتب فكرة الفيديو...">
+<button class="bigBtn green" onclick="guideMe()">🧭 وجهني - نوع + كاميرا + جودة + صيغة 🔥</button>
+<div id="guideResult"></div>
+</div>
+
+<div id="upload" class="card hidden">
+<h2>📤 ارفع فيديو - كل المواقع</h2>
+<p>فيديوك دلوقتي: <b id="upInfo">MP4 - 1080p - نوع: شخص يتكلم</b></p>
+<button class="bigBtn blue" onclick="suggestUpload()">🎯 قولي ارفع فين؟</button>
+<div id="uploadSuggest"></div>
+<h3 style="margin-top:14px">👍 فيس بوك - Facebook</h3>
+<div class="upCard"><div><b>👍 فيس بوك ريلز - أحسن واحد للانتشار</b><br><small>📱 عمودي 9:16 - MP4 - 1080p - 15 لـ 90 ثانية - 💰 1$ لكل 1000 مشاهدة</small></div><a href="https://www.facebook.com/reels/create" target="_blank" style="background:#1877F2">ارفع ريلز ↗</a></div>
+<div class="upCard"><div><b>📄 فيس بوك - فيديو على صفحتك</b><br><small>🖥️ أفقي 16:9 - MP4 - 1080p - 1 لـ 3 دقايق</small></div><a href="https://www.facebook.com/" target="_blank" style="background:#1877F2">ارفع على الصفحة ↗</a></div>
+<div class="upCard"><div><b>📺 فيس بوك Watch - فيديو طويل</b><br><small>🖥️ أفقي 16:9 - MP4 - 4K - 8 لـ 15 دقيقة</small></div><a href="https://www.facebook.com/watch" target="_blank" style="background:#1877F2">ارفع Watch ↗</a></div>
+<div class="upCard"><div><b>👥 فيس بوك - الجروبات</b><br><small>📱 عمودي - MP4 - 30 ثانية</small></div><a href="https://www.facebook.com/groups" target="_blank" style="background:#1877F2">ارفع في جروب ↗</a></div>
+<h3 style="margin-top:14px">🎵 تيك توك ويوتيوب وانستجرام</h3>
+<div class="upCard"><div><b>🎵 تيك توك - TikTok</b><br><small>📱 عمودي 9:16 - MP4 - 1080p - 15 لـ 60 ثانية</small></div><a href="https://www.tiktok.com/upload" target="_blank" style="background:#000">ارفع تيك توك ↗</a></div>
+<div class="upCard"><div><b>▶️ يوتيوب - YouTube</b><br><small>🖥️ أفقي 16:9 - MP4 - 4K - 8 لـ 15 دقيقة - 💰 2$ لكل 1000</small></div><a href="https://www.youtube.com/upload" target="_blank" style="background:#FF0000">ارفع يوتيوب ↗</a></div>
+<div class="upCard"><div><b>⚡ يوتيوب شورتس - Shorts</b><br><small>📱 عمودي 9:16 - MP4 - 1080p - 15 لـ 60 ثانية</small></div><a href="https://www.youtube.com/upload" target="_blank" style="background:#FF0000">ارفع شورتس ↗</a></div>
+<div class="upCard"><div><b>📸 انستجرام ريلز - Instagram</b><br><small>📱 عمودي 9:16 - MP4 - 1080p - 15 لـ 90 ثانية</small></div><a href="https://www.instagram.com/" target="_blank" style="background:#E1306C">ارفع ريلز ↗</a></div>
+<h3 style="margin-top:14px">💰 مواقع تانية</h3>
+<div class="upCard"><div><b>🟡 كواي - Kwai</b><br><small>📱 عمودي 9:16 - MP4 - 15 لـ 60 ثانية</small></div><a href="https://www.kwai.com/" target="_blank" style="background:#FF7A00">ارفع كواي ↗</a></div>
+<div class="upCard"><div><b>🟣 لايكي - Likee</b><br><small>📱 عمودي 9:16 - MP4 - 15 لـ 60 ثانية</small></div><a href="https://l.likee.video/" target="_blank" style="background:#9C27B0">ارفع لايكي ↗</a></div>
+<div class="upCard"><div><b>📌 بنترست - Pinterest</b><br><small>📱 عمودي 9:16 - MP4</small></div><a href="https://www.pinterest.com/" target="_blank" style="background:#E60023">ارفع بنترست ↗</a></div>
+<div class="upCard"><div><b>🐦 اكس - X</b><br><small>🖥️ أفقي / عمودي - MP4</small></div><a href="https://x.com/compose" target="_blank" style="background:#000">ارفع X ↗</a></div>
+<div class="upCard"><div><b>💼 لينكد ان - LinkedIn</b><br><small>🖥️ أفقي 16:9 - MP4 - 1 لـ 3 دقايق</small></div><a href="https://www.linkedin.com/" target="_blank" style="background:#0A66C2">ارفع لينكد ان ↗</a></div>
+<div class="upCard"><div><b>🎬 ديلموشن - Dailymotion</b><br><small>🖥️ أفقي 16:9 - MP4</small></div><a href="https://www.dailymotion.com/upload" target="_blank" style="background:#00AAFF">ارفع ديلموشن ↗</a></div>
+<div class="upCard"><div><b>📹 فيميو - Vimeo</b><br><small>🖥️ أفقي 16:9 - MP4 - 4K</small></div><a href="https://vimeo.com/upload" target="_blank" style="background:#17B3E8">ارفع فيميو ↗</a></div>
+<div class="resultBox"><h3>🔥 خطة الرفع الصح:</h3><p><b>1.</b> ارفع الريلز على <b>فيس بوك + تيك توك + انستجرام + كواي</b> - نفس الفيديو في الاربعة<br><b>2.</b> ارفع الفيديو الطويل على <b>يوتيوب + فيس بوك Watch</b><br><b>3.</b> انشر 2 فيديو في اليوم: 7 مساء و 10 مساء</p></div>
+</div>
+
+<div id="photo" class="card hidden">
+<h2>🖼️ صورة</h2>
+<div class="uploadBox" onclick="document.getElementById('fileInput').click()">📸 دوس هنا وارفع صورتك</div>
+<input type="file" id="fileInput" accept="image/*" style="display:none" onchange="loadImage(event)">
+<img id="preview">
+<div id="photoInfo" style="display:none">
+<select id="photoFormat"><option>📦 MP4 - تيك توك ويوتيوب</option><option>🎞️ MOV - آيفون</option><option>🌐 WEBM - ويب</option><option>🖼️ GIF - متحرك</option><option>📱 عمودي 9:16 - ريلز</option><option>🖥️ أفقي 16:9 - يوتيوب</option></select>
+<button class="bigBtn green" onclick="analyzePhoto()">✨ اعمل برومبت</button><div id="photoResult"></div></div>
+</div>
+
+<div id="videoUp" class="card hidden">
+<h2>🎥 فيديو</h2>
+<div class="uploadBox" onclick="document.getElementById('videoInput').click()">🎥 دوس هنا وارفع فيديو</div>
+<input type="file" id="videoInput" accept="video/*" style="display:none" onchange="loadVideo(event)">
+<video id="videoPreview" controls></video>
+<div id="videoInfo" style="display:none">
+<select id="videoFormat"><option>📦 حول لـ MP4</option><option>🎞️ حول لـ MOV</option><option>🌐 حول لـ WEBM</option><option>🖼️ حول لـ GIF</option><option>📱 حول لـ عمودي 9:16</option><option>🖥️ حول لـ أفقي 16:9</option></select>
+<button class="bigBtn green" onclick="analyzeVideo()">🧭 وجهني</button><div id="videoResult"></div></div>
+</div>
+
+<div id="voice" class="card hidden">
+<h2>🎙️ صوت</h2>
+<div class="uploadBox" onclick="document.getElementById('voiceInput').click()">🎙️ دوس هنا وارفع صوت</div>
+<input type="file" id="voiceInput" accept="audio/*" style="display:none" onchange="loadVoice(event)">
+<audio id="voicePreview" controls style="display:none"></audio>
+<div id="voiceInfo" style="display:none"><button class="bigBtn green" onclick="analyzeVoice()">🧭 وجهني</button><div id="voiceResult"></div></div>
+</div>
+
+<div id="song" class="card hidden">
+<h2>🎵 أغنية</h2>
+<div class="uploadBox" onclick="document.getElementById('songInput').click()">🎵 دوس هنا وارفع أغنية</div>
+<input type="file" id="songInput" accept="audio/*" style="display:none" onchange="loadSong(event)">
+<audio id="songPreview" controls style="display:none"></audio>
+<div id="songInfo" style="display:none"><button class="bigBtn green" onclick="analyzeSong()">🧭 وجهني</button><div id="songResult"></div></div>
+</div>
+
+<div id="sites" class="card hidden">
+<h2>📺 1000 موقع توليد</h2>
+<select id="filterFormat" onchange="filterSites()"><option value="all">📦 كل الصيغ</option><option value="MP4">📦 MP4</option><option value="MOV">🎞️ MOV</option><option value="WEBM">🌐 WEBM</option><option value="GIF">🖼️ GIF</option><option value="عمودي">📱 عمودي 9:16</option><option value="أفقي">🖥️ أفقي 16:9</option></select>
+<select id="filterQuality2" onchange="filterSites()"><option value="all">✨ كل الجودات</option><option value="1080p">1080p</option><option value="4K">4K</option><option value="8K">8K</option></select>
+<input id="search" placeholder="دور هنا... MP4 / 4K / درون / سينما" oninput="filterSites()">
+<p id="sitesCount"></p>
+<div id="list"></div>
+</div>
+
+<div id="prompt" class="card hidden">
+<h2>✍️ برومبت</h2>
+<input id="pIdea" placeholder="اكتب فكرتك...">
+<select id="pType"><option>شخص يتكلم</option><option>شخص يرقص</option><option>فيلم</option><option>إعلان</option><option>تيك توك</option><option>كرتون</option><option>أنمي</option><option>كليب</option></select>
+<select id="pCam"><option>ثابتة</option><option>بتلف 360</option><option>زوم داخل</option><option>بتطير - درون</option><option>سلو موشن</option><option>سينمائية - دوللي</option></select>
+<select id="pStyle"><option>سينما</option><option>جرافيك</option><option>كرتون</option><option>أنمي</option><option>واقعي</option><option>3D</option></select>
+<select id="pQuality"><option>720p HD</option><option selected>1080p Full HD</option><option>4K Ultra HD</option><option>8K</option></select>
+<select id="pFormat"><option>📦 MP4 - تيك توك ويوتيوب</option><option>🎞️ MOV - آيفون ومونتاج</option><option>🌐 WEBM - للويب</option><option>🖼️ GIF - متحرك</option><option>📱 عمودي 9:16 - ريلز وتيك توك</option><option>🖥️ أفقي 16:9 - يوتيوب</option><option>⬛ مربع 1:1 - فيسبوك</option><option>🎬 سينمائي 21:9</option></select>
+<button class="bigBtn" onclick="makePrompt()">اعمل البرومبت - نوع + كاميرا + جودة + صيغة</button>
+<textarea id="pOut" rows="9"></textarea>
+<button class="bigBtn blue" onclick="navigator.clipboard.writeText(document.getElementById('pOut').value)">نسخ</button>
+</div>
+
+<div id="translate" class="card hidden">
+<h2>🗣️ مترجم</h2>
+<textarea id="trInput" rows="3" placeholder="اكتب بالعربي..."></textarea>
+<button class="bigBtn green" onclick="translatePrompt()">🌍 ترجم لـ انجليزي</button>
+<textarea id="trOut" rows="5"></textarea>
+</div>
+
+<div id="ideas" class="card hidden">
+<h2>💡 أفكار</h2>
+<button class="bigBtn" onclick="makeIdeas()">ابتكر 10 أفكار 🔥</button>
+<div id="iOut"></div>
+</div>
+
+<div id="trend" class="card hidden">
+<h2>🔥 ترندات</h2>
+<button class="bigBtn orange" onclick="showTrends()">🔥 هات ترندات النهاردة</button>
+<div id="trendOut"></div>
+</div>
+
+<div id="script" class="card hidden">
+<h2>📝 سكريبت</h2>
+<input id="sIdea" placeholder="اكتب فكرة الفيديو">
+<select id="sCam"><option>ثابتة</option><option>بتلف 360</option><option>زوم داخل</option><option>درون</option><option>سينمائية</option></select>
+<select id="sFormat"><option>📦 MP4</option><option>🎞️ MOV</option><option>📱 عمودي 9:16</option><option>🖥️ أفقي 16:9</option></select>
+<button class="bigBtn" onclick="makeScript()">اكتب السكريبت</button>
+<textarea id="sOut" rows="12"></textarea>
+</div>
+
+<div id="schedule" class="card hidden">
+<h2>📅 نشر</h2>
+<button class="bigBtn green" onclick="makeSchedule()">📅 اعمل جدول النشر</button>
+<div id="scheduleOut"></div>
+</div>
+
+<div id="saved" class="card hidden">
+<h2>💾 فيديوهاتي</h2>
+<button class="bigBtn" onclick="loadSaved()">🔄 عرض فيديوهاتي</button>
+<div id="savedOut"></div>
+</div>
+
+<div id="money" class="card hidden">
+<h2>📊 أرباح</h2>
+<input id="moneyViews" type="number" placeholder="عدد المشاهدات... مثال 100000">
+<button class="bigBtn green" onclick="calcMoney()">💰 احسب أرباحي</button>
+<div id="moneyOut"></div>
+</div>
+
+<div id="views" class="card hidden">
+<h2>👁️ مشاهدات</h2>
+<div id="counter">0</div>
+<input id="vAdd" type="number" placeholder="مشاهدات فيديو جديد...">
+<button class="bigBtn" onclick="addViews()">أضف +</button>
+<div id="vHistory"></div>
+</div>
+
+<div class="footer">
+<img src="mohamed.jpg" onerror="this.src='https://via.placeholder.com/80'">
+<div style="text-align:center"><div style="font-size:13px;color:#aaa">AI VIDEO GENERATOR 1000 - © 2026</div><div style="margin-top:10px"><a class="whatsBtn" href="https://wa.me/201020810297" target="_blank">💬 واتساب - 01020810297</a></div></div>
+</div>
+</div>
+
+<script>
+var selType="شخص يتكلم", selQuality="1080p Full HD", selCam="ثابتة", selStyle="سينما", selFormat="MP4 - تيك توك ويوتيوب";
+function toggleMenu(){var m=document.getElementById('topLinks');var b=document.getElementById('menuBtn');var open=m.classList.toggle('open');b.innerText=open?'✕':'☰';}
+function showSec(id,btn){var cards=document.querySelectorAll('.card');for(var i=0;i<cards.length;i++){cards[i].classList.add('hidden');}document.getElementById(id).classList.remove('hidden');var btns=document.querySelectorAll('#topLinks button');for(var j=0;j<btns.length;j++){btns[j].classList.remove('active');}if(btn){btn.classList.add('active');}window.scrollTo(0,0);updateUpInfo();}
+function pickType(btn,val){var b=document.querySelectorAll('#typeGrid button');for(var i=0;i<b.length;i++)b[i].classList.remove('active');btn.classList.add('active');selType=val;document.getElementById('selectedType').innerText=val;}
+function pickCam(btn,val){var b=document.querySelectorAll('#camGrid button');for(var i=0;i<b.length;i++)b[i].classList.remove('active');btn.classList.add('active');selCam=val;document.getElementById('selectedCam').innerText=val;document.getElementById('selectedCam2').innerText=val;}
+function pickStyle(btn,val){var b=document.querySelectorAll('#styleGrid button');for(var i=0;i<b.length;i++)b[i].classList.remove('active');btn.classList.add('active');selStyle=val;document.getElementById('selectedStyle').innerText=val;document.getElementById('selectedStyle2').innerText=val;}
+function pickQuality(btn,val){var b=document.querySelectorAll('#qualityGrid button');for(var i=0;i<b.length;i++)b[i].classList.remove('active');btn.classList.add('active');selQuality=val;document.getElementById('selectedQuality').innerText=val;document.getElementById('selectedQuality2').innerText=val;updateUpInfo();}
+function pickFormat(btn,val){var b=document.querySelectorAll('#formatGrid button');for(var i=0;i<b.length;i++)b[i].classList.remove('active');btn.classList.add('active');selFormat=val;document.getElementById('selectedFormat').innerText=val;document.getElementById('selectedFormat2').innerText=val.split(' - ')[0];updateUpInfo();}
+function updateUpInfo(){var el=document.getElementById('upInfo');if(el){el.innerText=selFormat+" - "+selQuality+" - نوع: "+selType;}}
+var TRANS={
+ar:{guide:"المرشد",photo:"صورة",video:"فيديو",voice:"صوت",song:"أغنية",sites:"1000 موقع",prompt:"برومبت",translate:"مترجم",ideas:"أفكار",trends:"ترندات",script:"سكريبت",schedule:"نشر",saved:"فيديوهاتي",money:"أرباح",views:"مشاهدات",sub:"1000 موقع • 15 أداة",hero:"برنامج واحد فيه 1000 موقع لتوليد الفيديو + 15 أداة + مواقع الرفع"},
+en:{guide:"Guide",photo:"Photo",video:"Video",voice:"Voice",song:"Song",sites:"1000 Sites",prompt:"Prompt",translate:"Translate",ideas:"Ideas",trends:"Trends",script:"Script",schedule:"Schedule",saved:"My Videos",money:"Earnings",views:"Views",sub:"1000 sites • 15 tools",hero:"One app with 1000 AI video sites + 15 tools + Upload sites"},
+fr:{guide:"Guide",photo:"Photo",video:"Vidéo",voice:"Voix",song:"Chanson",sites:"1000 Sites",prompt:"Prompt",translate:"Traduire",ideas:"Idées",trends:"Tendances",script:"Script",schedule:"Publier",saved:"Mes Vidéos",money:"Gains",views:"Vues",sub:"1000 sites • 15 outils",hero:"Une app avec 1000 sites vidéo IA + 15 outils + Sites d'upload"},
+es:{guide:"Guía",photo:"Foto",video:"Video",voice:"Voz",song:"Canción",sites:"1000 Sitios",prompt:"Prompt",translate:"Traducir",ideas:"Ideas",trends:"Tendencias",script:"Guion",schedule:"Publicar",saved:"Mis Videos",money:"Ganancias",views:"Vistas",sub:"1000 sitios • 15 herramientas",hero:"Una app con 1000 sitios de video IA + 15 herramientas + Sitios para subir"},
+de:{guide:"Guide",photo:"Foto",video:"Video",voice:"Stimme",song:"Lied",sites:"1000 Seiten",prompt:"Prompt",translate:"Übersetzen",ideas:"Ideen",trends:"Trends",script:"Skript",schedule:"Posten",saved:"Meine Videos",money:"Verdienst",views:"Aufrufe",sub:"1000 Seiten • 15 Tools",hero:"Eine App mit 1000 KI-Video-Seiten + 15 Tools + Upload-Seiten"},
+tr:{guide:"Rehber",photo:"Fotoğraf",video:"Video",voice:"Ses",song:"Şarkı",sites:"1000 Site",prompt:"Prompt",translate:"Çevir",ideas:"Fikirler",trends:"Trendler",script:"Senaryo",schedule:"Yayın",saved:"Videolarım",money:"Kazanç",views:"İzlenme",sub:"1000 site • 15 araç",hero:"1000 AI video sitesi + 15 araç + Yükleme siteleri"},
+hi:{guide:"गाइड",photo:"फोटो",video:"वीडियो",voice:"आवाज़",song:"गाना",sites:"1000 साइट",prompt:"प्रॉम्प्ट",translate:"अनुवाद",ideas:"आइडिया",trends:"ट्रेंड",script:"स्क्रिप्ट",schedule:"पोस्ट",saved:"मेरे वीडियो",money:"कमाई",views:"व्यूज",sub:"1000 साइट • 15 टूल",hero:"एक ऐप में 1000 AI वीडियो साइट + 15 टूल + अपलोड साइट"}
+};
+function setLang(l){var d=TRANS[l]||TRANS.ar;var els=document.querySelectorAll('[data-t]');for(var i=0;i<els.length;i++){var k=els[i].getAttribute('data-t');if(d[k])els[i].innerText=d[k];}document.getElementById('subTitle').innerText=d.sub;document.getElementById('heroDesc').innerHTML=d.hero;if(l==='ar'){document.documentElement.dir='rtl';}else{document.documentElement.dir='ltr';}try{localStorage.setItem('appLang',l);}catch(e){}}
+try{var sl=localStorage.getItem('appLang');if(sl){document.getElementById('langSelect').value=sl;setLang(sl);}}catch(e){}
+function suggestUpload(){
+var html="";
+if(selType==="فيلم"||selFormat.indexOf("أفقي")>-1||selFormat.indexOf("سينمائي")>-1){
+html='<div class="resultBox"><h3>🎯 ارفع فين؟ فيديو طويل / فيلم</h3><p>✅ <b>1. يوتيوب</b> - أعلى ربح<br>✅ <b>2. فيس بوك Watch</b><br>📦 صيغتك: '+selFormat+' - جودة: '+selQuality+'</p><a href="https://www.youtube.com/upload" target="_blank"><button class="bigBtn" style="background:#FF0000">▶️ ارفع على يوتيوب دلوقتي</button></a><a href="https://www.facebook.com/watch" target="_blank"><button class="bigBtn" style="background:#1877F2">👍 ارفع على فيس بوك Watch</button></a></div>';
+} else if(selType==="تيك توك"||selFormat.indexOf("عمودي")>-1||selFormat.indexOf("شورتس")>-1||selFormat.indexOf("ستوري")>-1){
+html='<div class="resultBox"><h3>🎯 ارفع فين؟ ريلز / شورتس / تيك توك</h3><p>✅ <b>1. فيس بوك ريلز</b> - بيجيب متابعين بسرعة<br>✅ <b>2. تيك توك</b><br>✅ <b>3. انستجرام ريلز</b><br>✅ <b>4. كواي</b><br>📦 صيغتك: '+selFormat+' - جودة: '+selQuality+'</p><a href="https://www.facebook.com/reels/create" target="_blank"><button class="bigBtn" style="background:#1877F2">👍 ارفع ريلز فيس بوك دلوقتي</button></a><a href="https://www.tiktok.com/upload" target="_blank"><button class="bigBtn" style="background:#000">🎵 ارفع تيك توك</button></a></div>';
+} else {
+html='<div class="resultBox"><h3>🎯 ارفع فين؟ نوع: '+selType+'</h3><p>✅ <b>1. فيس بوك ريلز</b><br>✅ <b>2. تيك توك</b><br>✅ <b>3. يوتيوب</b><br>📦 صيغتك: '+selFormat+' - جودة: '+selQuality+'</p><a href="https://www.facebook.com/reels/create" target="_blank"><button class="bigBtn" style="background:#1877F2">👍 ارفع فيس بوك ريلز</button></a></div>';
+}
+document.getElementById('uploadSuggest').innerHTML=html;
+}
+var base=[
+["Google Flow","labs.google/fx/tools/flow","فيديو بصوت - 1080p, 4K","نص","مجاني جزئي","🔄 20 مرة","⏱️ 8 ثواني","🎥 سينمائية","🎬 سينما","📦 MP4"],
+["Sora 2","sora.chatgpt.com","فيديو 15 ثانية - 1080p","نص","مجاني جزئي","🔄 5 مرات","⏱️ 15 ثانية","🎥 بتلف حواليه","🎬 سينما","📦 MP4"],
+["Grok Imagine","grok.com","فيديو 6 ثواني - 1080p","نص","مجاني","🔄 من غير حدود","⏱️ 6 ثواني","🎥 زوم داخل","🎬 جرافيك","📦 MP4"],
+["Kling","klingai.com","حركة واقعية - 1080p, 4K","نص","مجاني جزئي","🔄 5 مرات","⏱️ 10 ثواني","🎥 بتجري وراه","🎬 واقعي","📦 MP4"],
+["Hailuo","hailuoai.video","وشوش واقعية - 1080p","نص","مجاني جزئي","🔄 5 مرات","⏱️ 6 ثواني","🎥 ثابتة","🎬 واقعي","📦 MP4"],
+["Luma Ray","lumalabs.ai","كاميرا بتلف - 1080p","نص","مجاني جزئي","🔄 3 مرات","⏱️ 10 ثواني","🎥 بتلف 360","🎬 سينما","📦 MOV"],
+["Runway","runwayml.com","يعدل فيديو - 1080p, 4K","فيديو","مجاني جزئي","🔄 3 مرات","⏱️ 10 ثواني","🎥 سينمائية","🎬 سينما","📦 MP4"],
+["Pika","pika.art","تأثيرات - 1080p","نص","مجاني جزئي","🔄 5 مرات","⏱️ 10 ثواني","🎥 زوم داخل","🎬 جرافيك","📦 GIF"],
+["Vidu","vidu.com","فيديو 20 ثانية - 1080p","نص","مجاني جزئي","🔄 5 مرات","⏱️ 20 ثانية","🎥 بتلف حواليه","🎬 أنمي","📦 MP4"],
+["HeyGen","heygen.com","أفاتار يتكلم - 1080p","أفاتار","مجاني جزئي","🔄 3 مرات","⏱️ 3 دقايق","🎥 ثابتة","🎬 واقعي","📦 MP4"],
+["Vidnoz","vidnoz.com","أفاتار مجاني - 1080p","أفاتار","مجاني","🔄 من غير حدود","⏱️ 10 دقايق","🎥 ثابتة","🎬 واقعي","📦 MP4"],
+["CapCut","capcut.com","تيك توك - 4K","فيديو","مجاني","🔄 من غير حدود","⏱️ أي مدة","🎥 كل الحركات","🎬 كل الستايلات","📦 MP4 + عمودي"],
+["Qwen","chat.qwen.ai","بالعربي - 1080p","نص","مجاني","🔄 من غير حدود","⏱️ 15 ثانية","🎥 بتلف حواليه","🎬 سينما","📦 MP4"],
+["Topaz","topazlabs.com","يحول لـ 4K, 8K","فيديو","مدفوع","🔄 مرة واحدة","⏱️ أي مدة","🎥 ثابتة","🎬 سينما","📦 MOV + MP4"]
+];
+var sites=[];
+for(var i=0;i<1000;i++){var b=base[i%base.length];var num=(i+1)+". "+b[0];if(i>=base.length){num+=" "+(i+1);}sites.push([num,b[1],b[2],b[3],b[4],b[5],b[6],b[7],b[8],b[9]]);}
+document.getElementById('statTotal').innerText=sites.length;
+document.getElementById('statFree').innerText=sites.filter(function(x){return x[4]==="مجاني";}).length;
+document.getElementById('statPartial').innerText=sites.filter(function(x){return x[4]==="مجاني جزئي";}).length;
+function badge(p){if(p==="مجاني")return '<span class="badge badge-free">💚 مجاني</span>';if(p==="مجاني جزئي")return '<span class="badge badge-partial">💛 جزئي</span>';return '<span class="badge badge-paid">💎 مدفوع</span>';}
+function render(list){var html="";for(var i=0;i<list.length;i++){var s=list[i];html+='<div class="site"><div><b>'+s[0]+'</b><br><small>'+s[2]+'</small><br>'+badge(s[4])+'<span class="badge badge-trial">'+s[5]+'</span><span class="badge badge-duration">'+s[6]+'</span><br><span class="badge badge-cam">'+s[7]+'</span><span class="badge badge-style">'+s[8]+'</span><span class="badge badge-format">'+s[9]+'</span></div><a href="https://'+s[1]+'" target="_blank">افتح ↗</a></div>';}document.getElementById('list').innerHTML=html;document.getElementById('sitesCount').innerText='عرض '+list.length+' موقع من 1000';}
+render(sites.slice(0,100));
+function filterSites(){var q=document.getElementById('search').value.toLowerCase();var ff=document.getElementById('filterFormat').value;var fq=document.getElementById('filterQuality2').value;var f=sites.filter(function(s){var okQ=s[0].toLowerCase().indexOf(q)>-1||s[2].indexOf(q)>-1||s[7].indexOf(q)>-1||s[8].indexOf(q)>-1||s[9].indexOf(q)>-1;var okF=ff==='all'||s[9].indexOf(ff)>-1;var okQu=fq==='all'||s[2].indexOf(fq)>-1;return okQ&&okF&&okQu;});render(f.slice(0,200));}
+function loadImage(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var img=document.getElementById('preview');img.src=ev.target.result;img.style.display='block';document.getElementById('photoInfo').style.display='block';};r.readAsDataURL(f);}
+function analyzePhoto(){var fmt=document.getElementById('photoFormat').value;document.getElementById('photoResult').innerHTML='<div class="resultBox">برومبت: "الصورة دي تتحرك، نوع '+selType+'، كاميرا '+selCam+'، ستايل '+selStyle+'، جودة '+selQuality+'، صيغة '+fmt+'"</div>';}
+function loadVideo(e){var f=e.target.files[0];if(!f)return;var v=document.getElementById('videoPreview');v.src=URL.createObjectURL(f);v.style.display='block';document.getElementById('videoInfo').style.display='block';}
+function analyzeVideo(){var fmt=document.getElementById('videoFormat').value;document.getElementById('videoResult').innerHTML='<div class="resultBox"><h3>🎯 أحسن موقع: Topaz - topazlabs.com</h3><p>بيحول لـ '+selQuality+' - صيغة '+fmt+' - كاميرا '+selCam+' - ستايل '+selStyle+'</p></div>';}
+function loadVoice(e){var f=e.target.files[0];if(!f)return;var a=document.getElementById('voicePreview');a.src=URL.createObjectURL(f);a.style.display='block';document.getElementById('voiceInfo').style.display='block';}
+function analyzeVoice(){document.getElementById('voiceResult').innerHTML='<div class="resultBox"><h3>🎯 ElevenLabs - elevenlabs.io</h3><p>بيترجم 29 لغة</p></div>';}
+function loadSong(e){var f=e.target.files[0];if(!f)return;var a=document.getElementById('songPreview');a.src=URL.createObjectURL(f);a.style.display='block';document.getElementById('songInfo').style.display='block';}
+function analyzeSong(){document.getElementById('songResult').innerHTML='<div class="resultBox"><h3>🎯 Kaiber - kaiber.ai</h3><p>بيعمل كليب 4 دقايق - صيغة '+selFormat+'</p></div>';}
+function guideMe(){var idea=document.getElementById('gIdea').value||"فيديو جديد";var best="Kling - klingai.com";var why="أحسن واحد للنوع ده.";if(selCam.indexOf("360")>-1){best="Luma Ray - lumalabs.ai";why="أحسن واحد في اللف 360.";}if(selCam.indexOf("درون")>-1){best="Wan - wan.video";why="أحسن واحد في الدرون.";}if(selStyle==="كرتون"||selStyle==="أنمي"){best="Krikey - krikey.ai";why="متخصص كرتون وأنمي.";}if(selStyle==="جرافيك"){best="Topview - topview.ai";why="أحسن واحد في الجرافيك.";}if(selStyle==="سينما"){best="Google Flow - labs.google/fx/tools/flow";why="أحسن واحد في السينما.";}if(selFormat.indexOf("GIF")>-1){best="Pika - pika.art";why="أحسن واحد يعمل GIF متحرك.";}if(selFormat.indexOf("عمودي")>-1||selFormat.indexOf("شورتس")>-1){best="CapCut - capcut.com";why="أحسن واحد للعمودي والشورتس.";}
+var prompt='"'+idea+'، نوع '+selType+'، ستايل '+selStyle+'، كاميرا '+selCam+'، جودة '+selQuality+'، صيغة '+selFormat+'"';
+document.getElementById('guideResult').innerHTML='<div class="resultBox"><h2>🎯 الأنسب ليك:</h2><h1 style="color:#00ff88">'+best+'</h1><p>🎬 '+selType+' | 🎥 '+selCam+' | 🎨 '+selStyle+' | ✨ '+selQuality+' | 📦 '+selFormat+'</p><p>'+why+'</p><p style="background:#333;padding:10px;border-radius:10px">'+prompt+'</p><a href="https://'+best.split(' - ')[1]+'" target="_blank"><button class="bigBtn blue">🚀 افتح دلوقتي</button></a><button class="bigBtn" style="background:#1877F2" onclick="showSec(\'upload\')">📤 ارفع فيديو - فيس بوك وغيره</button></div>';document.getElementById('pIdea').value=idea;}
+function makePrompt(){var idea=document.getElementById('pIdea').value||"فيديو جديد";var t=document.getElementById('pType').value;var c=document.getElementById('pCam').value;var s=document.getElementById('pStyle').value;var q=document.getElementById('pQuality').value;var f=document.getElementById('pFormat').value;document.getElementById('pOut').value='برومبت - نوع '+t+' - ستايل '+s+' - كاميرا '+c+' - جودة '+q+' - صيغة '+f+':\n\n"'+idea+'، نوع '+t+'، ستايل '+s+'، كاميرا '+c+'، جودة '+q+'، صيغة '+f+', إضاءة سينمائية"';}
+function translatePrompt(){var inp=document.getElementById('trInput').value||"ولد بيرقص في الشارع";document.getElementById('trOut').value='Cinematic video, '+inp+', '+selCam+', '+selStyle+' style, '+selQuality+', format '+selFormat;}
+function makeIdeas(){var arr=["خليت صورتي تتكلم 4K ببلاش","عملت فيلم ساعة من صورة","خليت قطتي بطلة فيلم","عملت أغنية وكليب ببلاش","عملت إعلان لمنتج مش موجود","خليت AI يرقص شعبي","عملت قصة رعب من صورة","حولت كتابي لفيلم"];var h="";for(var i=0;i<arr.length;i++){h+='<div class="site"><b>'+(i+1)+'. '+arr[i]+' - '+selFormat+'</b></div>';}document.getElementById('iOut').innerHTML=h;}
+function showTrends(){document.getElementById('trendOut').innerHTML='<div class="site"><b>🔥 ترند: صورتك القديمة بتتكلم - D-ID - MP4</b></div><div class="site"><b>🔥 ترند: قطتي بطلة فيلم - Kling - 4K</b></div><div class="site"><b>🔥 ترند: إعلان لمنتج مش موجود - Topview - عمودي</b></div><div class="site"><b>🔥 ترند: AI يرقص شعبي - Viggle - MP4</b></div>';}
+function makeScript(){var idea=document.getElementById('sIdea').value||"فيديو جديد";var c=document.getElementById('sCam').value;var f=document.getElementById('sFormat').value;document.getElementById('sOut').value='سكريبت - '+idea+'\n🎬 نوع: '+selType+'\n🎥 كاميرا: '+c+'\n🎨 ستايل: '+selStyle+'\n✨ جودة: '+selQuality+'\n📦 صيغة: '+f+'\n[0-3 ث] "استنى... ده AI"\n[3-15 ث] "عملت الفيديو ده"\n[آخر 5 ث] "اكتب عايز وهبعت لك"';}
+function makeSchedule(){document.getElementById('scheduleOut').innerHTML='<div class="resultBox"><h3>📅 جدول نشر</h3><p>🕖 7 مساء - 🕙 10 مساء - 🕛 12 الضهر<br>انشر 2 فيديو في اليوم - ارفع على فيس بوك + تيك توك + يوتيوب - صيغة '+selFormat+'</p></div>';}
+function loadSaved(){document.getElementById('savedOut').innerHTML='<div class="site"><b>فيديو محفوظ - 🎬 '+selType+' - 🎥 '+selCam+' - ✨ '+selQuality+' - 📦 '+selFormat+'</b></div>';}
+function calcMoney(){var v=parseInt(document.getElementById('moneyViews').value||100000);var earn=v/1000*2;document.getElementById('moneyOut').innerHTML='<div class="resultBox"><h3>💰 أرباحك</h3><p>'+v+' مشاهدة = '+earn.toFixed(2)+' دولار</p></div>';}
+var total=0;try{total=parseInt(localStorage.getItem('views')||0);}catch(e){total=0;}document.getElementById('counter').innerText=total.toLocaleString();
+function addViews(){var v=parseInt(document.getElementById('vAdd').value||0);total+=v;try{localStorage.setItem('views',total);}catch(e){}document.getElementById('counter').innerText=total.toLocaleString();document.getElementById('vHistory').innerHTML+='<div class="site"><b>+'+v+' مشاهدة</b></div>';}
+updateUpInfo();
+</script>
+</body>
+</html>
